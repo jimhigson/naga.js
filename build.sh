@@ -11,7 +11,10 @@ echo "building at $(date)"
 # Edit these variables to suit your install:
 JSTD_JAR=~/dev/jstestdriver/JsTestDriver-1.3.5.jar
 SERVER=http://localhost:4224
-BASEPATH=~/Sites/dissertation/
+BASEPATH=~/dissertation/
+
+cd $BASEPATH
+
 
 if [ "$1" ] ; then
   TESTS=$1
@@ -21,8 +24,8 @@ else
 fi
 
 function runjstd {
-   echo "Will run tests(" ${TESTS} ") against $1"
-   java -jar ${JSTD_JAR} --captureConsole --config naga/test/jsTestDriver-${1}.conf --server ${SERVER} --tests ${TESTS} --basePath ${BASEPATH} --reset   
+   echo "Will run $1 tests(" ${TESTS} ") against $2"
+   java -jar ${JSTD_JAR} --captureConsole --config ${1}/test/jsTestDriver-${2}.conf --server ${SERVER} --tests ${TESTS} --basePath ${BASEPATH} --reset   
 }
 
-runjstd dev
+runjstd naga dev

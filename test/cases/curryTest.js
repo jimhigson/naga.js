@@ -7,8 +7,6 @@
       return a * b * c;
    };
 
-
-
    AsyncTestCase("Naga.curry", {
 
       'test productOf3 works as intended':

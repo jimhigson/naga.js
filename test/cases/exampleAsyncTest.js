@@ -1,7 +1,5 @@
 console.log('this should be a very simple test');
 
-debugger;
-
 var tc = TestCase('foo');
 
 tc.prototype.testFoo = function() {
