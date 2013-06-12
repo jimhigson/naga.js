@@ -2,25 +2,21 @@
 
 AsyncTestCase('testLoadingDependencies', {
 
-   // shorten the waiting time before a test fails. Default 30s is too long:
-   setUp: function(){
-      jstestdriver.plugins.async.CallbackPool.TIMEOUT = 1000;
-      
-      configureRequireForRunningUnderJstd();
-      
-   }
+   setUp: configureForRequireUnderJstd
 
-,  testSmokeTestThatTestsAreRunning: function() {
-      assertTrue(true);
-   }
-   
+   /**
+    * Getting tests to run at all while loading via require needs a bit of code, some config
+    * and more than a little nuance.
+    * 
+    * Here we test that we can load something without actually testing very much about that thing.
+    */   
 ,  testLoadTestsWithDependenciesDirectlyViaRequire: function(testStepsQueue) {
 
       testStepsQueue.call('ask require to load a dependency', function( callbacks ){
                
          // In the interests of seperation of concerns under test, load identity since that's 
          // the simplest function provided by Naga. 
-         require([fromNaga('identity')], callbacks.add(function(identity) {
+         require(['naga/identity'], callbacks.add(function(identity) {
       
                                  
             // We don't want to test that the identity functions works as described, just that it has been
@@ -30,48 +26,19 @@ AsyncTestCase('testLoadingDependencies', {
       });
            
    }
-   
-,  testLoadTestsWithDependenciesViaHigherLevelFunction: function(testStepsQueue) {
-      
-      
 
-      testStepsQueue.call('ask require to load a dependency', function( callbacks ){
-               
-         // In the interests of seperation of concerns under test, load identity since that's 
-         // the simplest function provided by Naga. 
-         require([fromNaga('identity')], callbacks.add(function(identity) {
-      
-                                 
-            // We don't want to test that the identity functions works as described, just that it has been
-            // loaded correctly. That it has the correct name should suffice.
-            assertEquals( 'identity', identity.name );         
-         }));      
-      });
-           
-   }      
-
-});      
-
-
-/*
-var QueueTest = AsyncTestCase('QueueTest');
-
-console.log('will make an async test here');
-debugger;
-
-QueueTest.prototype.testSomething = function(queue) {
-  var state = 0;
-
-  queue.call('Step 1: assert the starting condition holds', function() {
-    assertEquals(0, state);
-  });
-
-  queue.call('Step 2: increment our variable', function() {
-    ++state;
-  });
-
-  queue.call('Step 3: assert the variable\'s value changed', function() {
-    assertEquals(1, state);
-  });
-};
-*/
+   /**
+    * You might notice that the above test is quite a lot of boilerplate for rather a small
+    * amount of assertions. Here we run the same test again but via a utility function that
+    * abstracts away the boilerplate.
+    * 
+    * Note that here we have to write very little extra to make an asynchronous test with
+    * async dependencies over we'd have to write for a statically loaded test.
+    */
+,  testLoadTestsWithDependenciesViaHigherLevelFunction:
+ 
+      testWithDependencies(['naga/identity'], function(identity){
+                                             
+         assertEquals( 'identity', identity.name );         
+      }) 
+});

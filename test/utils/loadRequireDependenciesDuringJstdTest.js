@@ -6,7 +6,11 @@
 /**
  * 
  */
-function configureRequireForRunningUnderJstd() {
+function configureForRequireUnderJstd() {
+
+   // shorten the waiting time before a test fails. Default 30s is too long since I'm only loading
+   // locally hosted files. Half a second is plenty.
+   jstestdriver.plugins.async.CallbackPool.TIMEOUT = 500;
 
    require.config({
    
@@ -14,61 +18,39 @@ function configureRequireForRunningUnderJstd() {
       // these are exposed using a serve: in the jstestdriver which means they have to
       // be under the path /test - that's just how jstd defines it  
       baseUrl: "/test"
-   });
-   
-   /*
-      could add some paths for 'naga', 'bell' etc here:      
+      
+      // if we're loading something from naga, we need to get it from the src directory
+      // since we running the debugging against uncompiled js source:
    ,  paths: {
-         "some": "some/v1.0"
+         'naga':'naga/src'      
       }
-   */   
+   });
+      
 }   
 
-/**
- * Provide a URL that Require can be used that includes the file on the special path that we set
- * up as a load: clause in the test loading config.
- * 
- * This has no relevance on the running of the code other than that I want to be able to run using
- * essentially two javascript lazy-loading libraries: jsTestDriver and require.js
- * 
- * <code>
- *    // inside a test do this:
- * 
- *    require([fromNaga('identity')], callbacks.add(function(identity){
- *    
- *       // should now have identity
- *    }));
- * </code>
- * 
- * @param fileName
- */
-function fromNaga( fileName ) {
-   return 'naga/src/' + fileName;
-}
 
 /**
  * A higher order function to create a test in jstd that waits for require to be
  * available before running
  * 
- * @param dependencies
- * @param testCase
+ * @param {String[]} dependencies
+ * @param {Function} testCaseFunction
  */
-function testWithDependencies( dependencies, testCase ) {
+function testWithDependencies( dependencies, testCaseFunction ) {
 
    // JSTestDriver's AsyncTestCase will call with a queue once it is
    // ready to run the asyncrhonous tests. We can add tests to that queue.
-   return function runTestOnceDependenciesAreRun(jstdQueue){
-
-      console.log('we have been given a queue');
+   return function runTestOnceDependenciesAreRun(testStepsQueue){
 
       // We add only a single item to jstd's queue,
       // which will be called by require once the dependencies are ready
       
-      jstdQueue.call('ask require to load dependencies', function(jstdCallbacks) {
-         require(dependencies, jstdCallbacks.add(testCase));
+      testStepsQueue.call('ask require to load dependencies', function(jstdCallbacks) {
+      
+         require(dependencies, jstdCallbacks.add(testCaseFunction));
+         
       });
       
-      // TODO: split into two queue items for easier debugging
    };
 
 }
