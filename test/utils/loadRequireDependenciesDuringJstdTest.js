@@ -52,8 +52,10 @@ function testWithDependencies( dependencies, testCaseFunction ) {
       
       testStepsQueue.call('ask require to load dependencies', function(jstdCallbacks) {
       
-         require(dependencies, jstdCallbacks.add(testCaseFunction));
-         
+         require(dependencies, 
+            jstdCallbacks.add(testCaseFunction),
+            jstdCallbacks.addErrback('could not load dependencies for test')
+         );         
       });
       
    };
