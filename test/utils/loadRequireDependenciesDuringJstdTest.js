@@ -22,7 +22,8 @@ function configureForRequireUnderJstd() {
       // if we're loading something from naga, we need to get it from the src directory
       // since we running the debugging against uncompiled js source:
    ,  paths: {
-         'naga':'naga/src'      
+         'naga':'naga/src',
+         'bell':'bell/src/'      
       }
    });
       
@@ -60,20 +61,19 @@ function testWithDependencies( dependencies, testCaseFunction ) {
    this allows the dependencies to be declared just once and passed to
    all the tests in the same suite.
  */
-function testsWithDependencies( suiteName, dependencies, tests ) {
-
-   console.log('about to create an AsyncTestCase with:', suiteName);
+function DependentTestCase( suiteName, dependencies, tests ) {
+   
    var AsyncTest = AsyncTestCase(suiteName);
+   
+   AsyncTestCase.prototype.setUp = configureForRequireUnderJstd; 
 
    //TODO: write as an ObjectMap from tests to testsMap
    for( var testName in tests ) {
-      console.log('adding async test for ' + suiteName + testName);
-
       AsyncTest.prototype[testName] = testWithDependencies( dependencies, tests[testName] );
    }
-
-   console.log('made it', AsyncTest);
 }
+
+
 
 /**
  * TODO:
@@ -102,7 +102,8 @@ function testsWithDependencies( suiteName, dependencies, tests ) {
  *       }
  *    }
  *
+ *    Problem is, can't have those values until require has loaded but need to put tests on the case
+ *    straight away
  *    Could maybe do this using steps in the same test?
+ *       Loses ability to run just one though so probably not worth it
  */
-function testsWithDependencies2( suiteName, dependencies, tests ) {
-}

@@ -42,3 +42,21 @@ AsyncTestCase('testLoadingDependencies', {
          assertEquals( 'identity', identity.name );         
       }) 
 });
+
+/**
+ * One step better, if there are quite a lot of tests that all need the same dependencies. Let's 
+ * cut this down even more in this example:
+ */
+DependentTestCase('testShortFormForSeveralCasesWithSameDependencies',
+   ['naga/identity'], {
+   
+      'testIdentityHasCorrectName': function(identity){                                             
+         assertEquals( 'identity', identity.name );         
+      },
+      
+      'testIdentityReturnsCorrectValue': function(identity){                                             
+         assertEquals( 'a', identity('a') );         
+      }      
+   
+   });
+  
