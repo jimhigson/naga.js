@@ -39,24 +39,34 @@ function configureForRequireUnderJstd() {
  * available before running
  * 
  * @param {String[]} dependencies
- * @param {Function} testCaseFunction
+ * @param {Function} testFunction
  */
-function testWithDependencies( dependencies, testCaseFunction ) {
+function testWithDependencies( dependencies, testFunction ) {
 
    // JSTestDriver's AsyncTestCase will call with a queue once it is
    // ready to run the asyncrhonous tests. We can add tests to that queue.
    return function runTestOnceDependenciesAreRun(testStepsQueue){
 
-      // We add only a single item to jstd's queue,
-      // which will be called by require once the dependencies are ready
+      var loadedDependencies;
       
+      function storeLoadedDependencies(/* the dependencies that were just loaded will be passed in here */){
+         loadedDependencies = arguments;
+      }      
+
+      // We add only a single item to jstd's queue,
+      // which will be called by require once the dependencies are ready      
       testStepsQueue.call('ask require to load dependencies', function(jstdCallbacks) {
       
          require(dependencies, 
-            jstdCallbacks.add(testCaseFunction),
-            jstdCallbacks.addErrback('could not load dependencies for test')
+            jstdCallbacks.add(storeLoadedDependencies),
+            jstdCallbacks.addErrback('Could not load dependencies via require')
          );         
       });
+      
+      testStepsQueue.call('run the test with loaded dependencies', function(jstdCallbacks) {
+      
+         testFunction.apply(null, loadedDependencies);         
+      });      
       
    };
 
