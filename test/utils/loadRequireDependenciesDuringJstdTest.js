@@ -23,8 +23,12 @@ function configureForRequireUnderJstd() {
       // since we running the debugging against uncompiled js source:
    ,  paths: {
          'naga':'naga/src',
-         'bell':'bell/src/'      
+         'bell':'bell/src'      
       }
+      
+      // all resources loaded via define should be defined using define and if not we 
+      // have an error:
+   ,  enforceDefine: true      
    });
       
 }   
