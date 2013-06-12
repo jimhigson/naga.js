@@ -17,24 +17,38 @@ AsyncTestCase('testLoadingDependencies', {
 ,  testLoadTestsWithDependenciesDirectlyViaRequire: function(testStepsQueue) {
 
       testStepsQueue.call('ask require to load a dependency', function( callbacks ){
-      
-         debugger;
-         
+               
          // In the interests of seperation of concerns under test, load identity since that's 
          // the simplest function provided by Naga. 
          require([fromNaga('identity')], callbacks.add(function(identity) {
       
-            debugger;
-      
-            jstestdriver.console.log("got the id function", identity);      
-         
-            // We don't want to test that the identity functions works as described, just that it is now
-            // available as a function:
-            assertEquals( "function", typeof identity );         
+                                 
+            // We don't want to test that the identity functions works as described, just that it has been
+            // loaded correctly. That it has the correct name should suffice.
+            assertEquals( 'identity', identity.name );         
          }));      
       });
            
-   }   
+   }
+   
+,  testLoadTestsWithDependenciesViaHigherLevelFunction: function(testStepsQueue) {
+      
+      
+
+      testStepsQueue.call('ask require to load a dependency', function( callbacks ){
+               
+         // In the interests of seperation of concerns under test, load identity since that's 
+         // the simplest function provided by Naga. 
+         require([fromNaga('identity')], callbacks.add(function(identity) {
+      
+                                 
+            // We don't want to test that the identity functions works as described, just that it has been
+            // loaded correctly. That it has the correct name should suffice.
+            assertEquals( 'identity', identity.name );         
+         }));      
+      });
+           
+   }      
 
 });      
 
