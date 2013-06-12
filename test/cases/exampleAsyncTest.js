@@ -1,13 +1,19 @@
 console.log('this should be a very simple test');
 
-var tc = TestCase('foo');
+var tc = AsyncTestCase('example', {
 
-tc.prototype.testFoo = function() {
+   testSmokeTestThatTestsAreRunning: function() {
+      assertTrue(true);
+   }
+   
+,  testLoadTestsWithDependencies: function() {
+
       jstestdriver.console.log("JsTestDriver", "Hello World!");
 
       assertTrue(true);
-      //throw new Error('what is going on?');
-   };
+   }   
+
+});      
 
 
 /*
