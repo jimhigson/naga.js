@@ -1,4 +1,5 @@
-console.log('this should be a very simple test');
+
+
 
 var tc = AsyncTestCase('example', {
 
@@ -6,11 +7,22 @@ var tc = AsyncTestCase('example', {
       assertTrue(true);
    }
    
-,  testLoadTestsWithDependencies: function() {
+,  testLoadTestsWithDependenciesDirectlyViaRequire: function(testStepsQueue) {
 
-      jstestdriver.console.log("JsTestDriver", "Hello World!");
-
-      assertTrue(true);
+      testStepsQueue.call('ask require to load a dependency', function( expectedCallbacks ){
+      
+         // In the interests of seperation of concerns under test, load identity since that's 
+         // the simplest function provided by Naga. 
+         require(['src/identity'], expectedCallbacks.add(function(identity) {
+      
+            jstestdriver.console.log("got the id function", identity);      
+         
+            // We don't want to test that the identity functions works as described, just that it is now
+            // available as a function:
+            assertEquals( "function", typeof identity );         
+         }));      
+      });
+           
    }   
 
 });      

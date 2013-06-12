@@ -1,17 +1,30 @@
+
+// TODO: add this to the writeup, explain why a higher order function.
+// Asynchronous loading via require etc.
+
+/**
+ * A higher order function to create a test in jstd that waits for require to be
+ * available before running
+ * 
+ * @param dependencies
+ * @param testCase
+ */
 function testWithDependencies( dependencies, testCase ) {
 
    // JSTestDriver's AsyncTestCase will call with a queue once it is
    // ready to run the asyncrhonous tests. We can add tests to that queue.
-   return function runTestOnceDependenciesAreRun(queue){
+   return function runTestOnceDependenciesAreRun(jstdQueue){
 
-      debugger;
       console.log('we have been given a queue');
 
-      // we have the queue. For each queue we add only a single item,
+      // We add only a single item to jstd's queue,
       // which will be called by require once the dependencies are ready
-      queue.call( function(callbacks) {
-         require(dependencies, callbacks.add( testCase ));
+      
+      jstdQueue.call('ask require to load dependencies', function(jstdCallbacks) {
+         require(dependencies, jstdCallbacks.add(testCase));
       });
+      
+      // TODO: split into two queue items for easier debugging
    };
 
 }
