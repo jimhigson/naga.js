@@ -10,7 +10,7 @@ function configureForRequireUnderJstd() {
 
    // shorten the waiting time before a test fails. Default 30s is too long since I'm only loading
    // locally hosted files. Half a second is plenty.
-   jstestdriver.plugins.async.CallbackPool.TIMEOUT = 500;
+   jstestdriver.plugins.async.CallbackPool.TIMEOUT = 2000;
 
    require.config({
    
@@ -57,13 +57,21 @@ function testWithDependencies( dependencies, testFunction ) {
       // which will be called by require once the dependencies are ready      
       testStepsQueue.call('ask require to load dependencies', function(jstdCallbacks) {
       
+         // a function which when called will fail the current jstd test, cancelling all further
+         // queue steps or expectation that any other callbacks will be called:
+         var jstdErrback = jstdCallbacks.addErrback('Could not load dependencies via require');      
+      
          require(dependencies, 
             jstdCallbacks.add(storeLoadedDependencies),
-            jstdCallbacks.addErrback('Could not load dependencies via require')
+            function requireErrback( requireError ) {               
+
+               jstdErrback('Failed to load modules:' + requireError.requireModules.join(',')
+                  + ' because: ' + requireError.requireType);
+            }
          );         
       });
       
-      testStepsQueue.call('run the test with loaded dependencies', function(jstdCallbacks) {
+      testStepsQueue.call('run the test with loaded dependencies', function() {
       
          testFunction.apply(null, loadedDependencies);         
       });      
