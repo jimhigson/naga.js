@@ -65,7 +65,7 @@ function testWithDependencies( dependencies, testFunction ) {
             jstdCallbacks.add(storeLoadedDependencies),
             function requireErrback( requireError ) {               
 
-               jstdErrback('Failed to load modules:' + requireError.requireModules.join(',')
+               jstdErrback('Failed to load module(s):' + requireError.requireModules.join(',')
                   + ' because: ' + requireError.requireType);
             }
          );         
