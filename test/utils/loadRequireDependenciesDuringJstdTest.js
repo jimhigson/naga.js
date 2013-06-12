@@ -63,8 +63,11 @@ function testWithDependencies( dependencies, testFunction ) {
       
          require(dependencies, 
             jstdCallbacks.add(storeLoadedDependencies),
+            
             function requireErrback( requireError ) {               
-
+               // this is called when require cannot load the dependencies asked for. Format
+               // the error a bit nicer and propagate to the jstd errback so that the test
+               // can halt:
                jstdErrback('Failed to load module(s):' + requireError.requireModules.join(',')
                   + ' because: ' + requireError.requireType);
             }
