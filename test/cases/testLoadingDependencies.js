@@ -1,19 +1,30 @@
 
 
+AsyncTestCase('testLoadingDependencies', {
 
-var tc = AsyncTestCase('example', {
+   // shorten the waiting time before a test fails. Default 30s is too long:
+   setUp: function(){
+      jstestdriver.plugins.async.CallbackPool.TIMEOUT = 1000;
+      
+      configureRequireForRunningUnderJstd();
+      
+   }
 
-   testSmokeTestThatTestsAreRunning: function() {
+,  testSmokeTestThatTestsAreRunning: function() {
       assertTrue(true);
    }
    
 ,  testLoadTestsWithDependenciesDirectlyViaRequire: function(testStepsQueue) {
 
-      testStepsQueue.call('ask require to load a dependency', function( expectedCallbacks ){
+      testStepsQueue.call('ask require to load a dependency', function( callbacks ){
       
+         debugger;
+         
          // In the interests of seperation of concerns under test, load identity since that's 
          // the simplest function provided by Naga. 
-         require(['src/identity'], expectedCallbacks.add(function(identity) {
+         require([fromNaga('identity')], callbacks.add(function(identity) {
+      
+            debugger;
       
             jstestdriver.console.log("got the id function", identity);      
          

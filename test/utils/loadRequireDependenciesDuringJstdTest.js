@@ -2,6 +2,50 @@
 // TODO: add this to the writeup, explain why a higher order function.
 // Asynchronous loading via require etc.
 
+
+/**
+ * 
+ */
+function configureRequireForRunningUnderJstd() {
+
+   require.config({
+   
+      // everything that will be brought in using require needs to be loaded from jstd,
+      // these are exposed using a serve: in the jstestdriver which means they have to
+      // be under the path /test - that's just how jstd defines it  
+      baseUrl: "/test"
+   });
+   
+   /*
+      could add some paths for 'naga', 'bell' etc here:      
+   ,  paths: {
+         "some": "some/v1.0"
+      }
+   */   
+}   
+
+/**
+ * Provide a URL that Require can be used that includes the file on the special path that we set
+ * up as a load: clause in the test loading config.
+ * 
+ * This has no relevance on the running of the code other than that I want to be able to run using
+ * essentially two javascript lazy-loading libraries: jsTestDriver and require.js
+ * 
+ * <code>
+ *    // inside a test do this:
+ * 
+ *    require([fromNaga('identity')], callbacks.add(function(identity){
+ *    
+ *       // should now have identity
+ *    }));
+ * </code>
+ * 
+ * @param fileName
+ */
+function fromNaga( fileName ) {
+   return 'naga/src/' + fileName;
+}
+
 /**
  * A higher order function to create a test in jstd that waits for require to be
  * available before running
