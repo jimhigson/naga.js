@@ -1,5 +1,5 @@
 define(
-   ['./template'],
+   ['naga/template'],
    function(template) {
 
       var functionExprTemplate = template('return {symbol}arguments[0];');

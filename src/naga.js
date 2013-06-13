@@ -3,10 +3,6 @@ window.Naga = (function(Naga) {
 
    var curry = Naga.curry;
 
-   function argArray(argumentsObject) {
-      return Array.prototype.slice.apply(argumentsObject);
-   }
-
    function allButLastFrom(array) {
       return Array.prototype.slice.apply(array, 0, array.length -2);
    }
@@ -17,15 +13,6 @@ window.Naga = (function(Naga) {
 
       f.apply(null, args);
    }
-
-
-   /** converts the given function to accept an args array instead of the arguments list. Sometimes this is
-    * simpler
-    */
-   var argumentsAsList =
-   Naga.argumentsAsList = function( f ) {
-      return f.call(this, argArray(arguments));
-   };
 
 
    /**
@@ -70,28 +57,6 @@ window.Naga = (function(Naga) {
       curry(function( conditionFunction, ifBranch, elseBranch ) {
          return conditionFunction.apply(this, arguments) ? ifBranch : elseBranch;
       });
-
-   /* Given a function that always returns the same value, returns a version of that function
-      which supports caching. That is, if it is called twice with the same parameters, on the
-      first execution the return value will be stored; on subsequent executions the stored
-      value will be returned rather than re-evaluating the function.
-    */
-   var cacheable =
-   Naga.cacheable =
-      function( fn ) {
-         var cache = {};
-
-         return function(){
-            var cacheKey = this + '$$$' + Array.prototype.join.apply(arguments, '$$$');
-            var returnValue = cache[cacheKey];
-
-            if( returnValue === undefined ) {
-               return cache[cacheKey] = fn.apply(this, arguments);
-            } else {
-               return returnValue;
-            }
-         };
-      };
 
 
 

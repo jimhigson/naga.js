@@ -1,6 +1,6 @@
 define(
-   ['./template', './cacheable', './argumentsAsList', './fold'],
-   function(template, cacheable, argumentsAsList, fold) {
+   ['naga/template', 'naga/cacheable', 'naga/argumentsAsList', 'naga/foldl1'],
+   function(template, cacheable, argumentsAsList, foldl1) {
 
       var combinerFuncTemplate =
             template('return arguments[0] {symbol} arguments[1]');

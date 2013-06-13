@@ -1,5 +1,7 @@
-define(
-   function(list){
+define([], function(){
+
+   return function(list){
       return list[0];
    }
-);
+   
+});

@@ -1,5 +1,5 @@
 define(
-   ['./lift'],
+   ['naga/lift'],
    function(lift){
 
       /**
@@ -32,7 +32,7 @@ define(
 
          // TODO: use Naga.defaults instead of ||
          // (write it first!)
-         atEnd = atEnd || Naga.lift(undefined);
+         atEnd = atEnd || lift(undefined);
 
          return function() {
             if( callCount == array.length ) {

@@ -1,4 +1,4 @@
-define('template', function(template){
+define(['naga/template'], function(template){
 
    /**
     * Create a new function. Like naga.template but throws an error instead of

@@ -1,4 +1,6 @@
 define(
+   [],
+   function(){
 
     /**
      * Lifts a value up into a function which will always return
@@ -31,12 +33,13 @@ define(
      *    SomeType.prototype.getFooCount = Naga.lift(0);
      * </code>
      */
-   function lift( val ) {
-
-      // TODO: optimise for non-object case using new Function?
-
-      return function() {
-         return val;
+      return function lift( val ) {
+   
+         // TODO: optimise for non-object case using new Function?
+   
+         return function() {
+            return val;
+         }
       }
    }
 );

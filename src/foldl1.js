@@ -1,7 +1,7 @@
 define(
-   ['foldl'],
+   ['naga/foldl', 'naga/head'],
 
-   function(foldl) {
+   function(foldl, head) {
 
       /**
        * Like foldl but doesn't require a starter item

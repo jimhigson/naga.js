@@ -1,5 +1,5 @@
 define(
-   ['./curry'],
+   [/*'naga/curry'*/],
    function(curry) {
 
       /**
@@ -59,9 +59,12 @@ define(
        * @param spec
        * @param baseFunction
        */
-      Naga.chain = function( spec, baseFunction ) {
+      return function( spec, baseFunction ) {
+
 
          // the implementation in here should pretty much just be curry with a new call style
+         console.warn('chain is unimplmented!');
+         return baseFunction;
 
       };
 

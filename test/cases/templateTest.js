@@ -1,9 +1,9 @@
 
 testsWithDependencies(
    'Naga.template',
-   ['Bell/givenWhenThen', 'Naga/template'],
+   ['bell/givenWhenThen', 'naga/template'],
    {
-      'test simple template':function () {
+      'test simple template':function (given, template) {
 
          given(template('{day} will be {weather}'))
             .when(calledWith('today', 'rainy'))

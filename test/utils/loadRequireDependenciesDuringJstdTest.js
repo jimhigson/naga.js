@@ -2,7 +2,6 @@
 // TODO: add this to the writeup, explain why a higher order function.
 // Asynchronous loading via require etc.
 
-
 /**
  * 
  */
@@ -33,7 +32,6 @@ function configureForRequireUnderJstd() {
       
 }   
 
-
 /**
  * A higher order function to create a test in jstd that waits for require to be
  * available before running
@@ -56,7 +54,7 @@ function testWithDependencies( dependencies, testFunction ) {
       // We add only a single item to jstd's queue,
       // which will be called by require once the dependencies are ready      
       testStepsQueue.call('ask require to load dependencies', function(jstdCallbacks) {
-      
+            
          // a function which when called will fail the current jstd test, cancelling all further
          // queue steps or expectation that any other callbacks will be called:
          var jstdErrback = jstdCallbacks.addErrback('Could not load dependencies via require');      
@@ -74,6 +72,7 @@ function testWithDependencies( dependencies, testFunction ) {
          );         
       });
       
+      // Shedule the test to run once the dependencies are loaded:
       testStepsQueue.call('run the test with loaded dependencies', function() {
       
          testFunction.apply(null, loadedDependencies);         
