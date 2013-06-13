@@ -57,40 +57,43 @@
  */
 
 define(
-   ['naga/chainSpecParser', 'naga/curry', 'naga/head', 'naga/tail'],
-   function(parse, curry, head, tail) {
+   ['naga/chainSpecParser', 'naga/curry', 'naga/head', 'naga/tail', 'naga/argumentsAsList'],
+   function(parse, curry, head, tail, argumentsAsList) {
 
       return function( spec, baseFunction ) {
       
          var terms = parse(spec);
          
-         return termsToObjectCallable(terms, baseFunction);
-                      
+         return termsToObjectCallable(terms, baseFunction, []);                      
       };
       
       
-      function termsToObjectCallable( terms, f ) {
-         
-         var inner;
+      function termsToObjectCallable( terms, f, argumentsAlreadyProvided ) {
+                  
+         function inner() {   
+            if( terms.length === 1 ) {
             
-         if( terms.length === 1 ) {
-         
-            inner = function() {
-               f.apply( null, arguments );
+               return function(newArguments) {
+               
+                  var argumentsSoFar = argumentsAlreadyProvided.concat(newArguments);            
+                  f.apply( null, argumentsSoFar );
+               }
+               
+            } else {
+            
+               return function(newArguments){
+               
+                  var argumentsSoFar = argumentsAlreadyProvided.concat(newArguments);            
+                  return termsToObjectCallable(tail(terms), f, argumentsSoFar);
+               } 
             }
-            
-         } else {
-         
-            inner = function(){
-               return termsToObjectCallable(tail(terms), f);
-            } 
          }             
                      
-         return mapping(head(terms), inner);
+         return singletonMapping( head(terms), argumentsAsList(inner()) );
       }
       
       
-      function mapping(key, value) {
+      function singletonMapping(key, value) {
          var rtn = {};
          rtn[key] = value;
          return rtn;
