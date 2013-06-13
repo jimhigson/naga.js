@@ -89,14 +89,16 @@ function testWithDependencies( dependencies, testFunction ) {
  */
 function DependentTestCase( suiteName, dependencies, tests ) {
    
-   var AsyncTest = AsyncTestCase(suiteName);
+   var testCase = AsyncTestCase(suiteName);
    
-   AsyncTestCase.prototype.setUp = configureForRequireUnderJstd; 
+   testCase.prototype.setUp = configureForRequireUnderJstd; 
 
    //TODO: write as an ObjectMap from tests to testsMap
    for( var testName in tests ) {
-      AsyncTest.prototype[testName] = testWithDependencies( dependencies, tests[testName] );
+      testCase.prototype[testName] = testWithDependencies( dependencies, tests[testName] );
    }
+   
+   return testCase;
 }
 
 
