@@ -1,4 +1,6 @@
-define(['naga/template'], function(template){
+define(
+   ['naga/template'], 
+   function(template){
 
    /**
     * Create a new function. Like naga.template but throws an error instead of
@@ -17,17 +19,16 @@ define(['naga/template'], function(template){
     *
     * @param pattern
     */
-   return function throwError(pattern, ErrorClass) {
+   return function throwError(messagePattern, ErrorConstructor) {
 
       // TODO: defaults function
-      ErrorClass = ErrorClass || Error;
+      ErrorConstructor = ErrorConstructor || Error;
 
-      var template = template(pattern);
+      var messageTemplate = template(messagePattern);
 
       return function(){
-         throw new ErrorClass( template.apply(null, arguments) );
+         throw new ErrorConstructor( messageTemplate.apply(null, arguments) );
       };
    };
-
 
 });
