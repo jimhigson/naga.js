@@ -11,6 +11,10 @@ define(
           'Attempt to partially complete {numberOfArguments} argument(s) into function "{funcName}" ' +
           'with arity of {arity}'
       );
+      
+      var airityOfZero = throwError('Attempt to curry complete function "{funcName}" with airity ' +
+          'of zero. This isn\'t terribly well suited to partial completion - how do we know when ' +
+          'we have enough arguments to call the underlying function?');      
 
       function partialComplete(f, arity, argumentAccumulator ) {
          return function( args ) {
@@ -49,6 +53,10 @@ define(
       return function curry(f, arity) {
          if( !arity ) {
             arity = f.length;
+         }
+         
+         if( arity === 0 ) {
+            airityOfZero();
          }
 
          return partialComplete(f, arity, []);
