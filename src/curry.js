@@ -1,22 +1,37 @@
 define(
-   function(){
+   ['naga/throwError'],
+
+   function(throwError){
+
+      var noArgumentsProvided = throwError(
+          'Attempt to partially complete with zero arguments provided'
+      );
+
+      var partialCompletionOfTooManyArguments = throwError(
+          'Attempt to partially complete {numberOfArguments} argument(s) into function "{funcName}" ' +
+          'with arity of {arity}'
+      );
 
       function partialComplete(f, arity, argumentAccumulator ) {
          return function( args ) {
-            var accumulatedArguments = argumentAccumulator.concat( args );
 
             if( args.length == 0 ) {
-               throw new Error("Attempt to partially complete with zero arguments provided");
+               noArgumentsProvided();
             }
-            else if( accumulatedArguments.length > arity ) {
-               throw new Error('Attempt to partially complete ' + accumulatedArguments.length +
-                   ' arguments into function with airity of ' + arity );
+         
+            var accumulatedArguments = argumentAccumulator.concat( args );
+            
+            if( accumulatedArguments.length > arity ) {
+          
+               partialCompletionOfTooManyArguments(accumulatedArguments.length, f.name, arity);
             }
-            else if( accumulatedArguments.length == arity ) {
-               return f.apply(null, accumulatedArgs);
-            } else {
-               return partialComplete(f, arity, accumulatedArguments);
-            }
+            
+            if( accumulatedArguments.length == arity ) {
+            
+               return f.apply(null, accumulatedArguments);               
+            } 
+            
+            return partialComplete(f, arity, accumulatedArguments);                           
          };
       }
 
