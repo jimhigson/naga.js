@@ -57,8 +57,8 @@
  */
 
 define(
-   ['naga/chainSpecParser', 'naga/curry', 'naga/head', 'naga/tail', 'naga/argumentsAsList'],
-   function(parse, curry, head, tail, argumentsAsList) {
+   ['naga/chainSpecParser', 'naga/curry', 'naga/head', 'naga/tail', 'naga/argumentsAsList', 'naga/singletonMapping'],
+   function(parse, curry, head, tail, argumentsAsList, singletonMapping) {
 
       return function( spec, baseFunction ) {
       
@@ -77,32 +77,25 @@ define(
       
       function wrappedForChaining(terms, f, argumentsAlreadyProvided) {
       
-         return argumentsAsList( inner(terms, f), argumentsAlreadyProvided );
-         
-         function inner(terms, f) {         
-            if( terms.length === 1 ) {
-            
-               return function(argumentsSoFar) {
-                           
-                  return f.apply( null, argumentsSoFar );
-               };
-               
-            } else {
-            
-               return function(argumentsSoFar){
-                           
-                  return termsToObjectCallable(tail(terms), f, argumentsSoFar);
-               }; 
-            }
-         }
-      }      
-      
-      
-      function singletonMapping(key, value) {
-         var rtn = {};
-         rtn[key] = value;
-         return rtn;
+         return argumentsAsList( inner(terms, f), argumentsAlreadyProvided );         
       }
       
+      function inner(terms, f) {         
+         if( terms.length === 1 ) {
+         
+            return function(argumentsSoFar) {
+                        
+               return f.apply( null, argumentsSoFar );
+            };
+            
+         } else {
+         
+            return function(argumentsSoFar){
+                        
+               return termsToObjectCallable(tail(terms), f, argumentsSoFar);
+            }; 
+         }
+      }                  
+           
    }
 );
