@@ -70,27 +70,32 @@ define(
       
       function termsToObjectCallable( terms, f, argumentsAlreadyProvided ) {
                   
-         function inner() {   
+         var wrappedFunction = wrappedForChaining(terms, f, argumentsAlreadyProvided);              
+                     
+         return singletonMapping( head(terms), wrappedFunction );
+      }
+      
+      function wrappedForChaining(terms, f, argumentsAlreadyProvided) {
+      
+         return argumentsAsList( inner(terms, f), argumentsAlreadyProvided );
+         
+         function inner(terms, f) {         
             if( terms.length === 1 ) {
             
-               return function(newArguments) {
-               
-                  var argumentsSoFar = argumentsAlreadyProvided.concat(newArguments);            
-                  f.apply( null, argumentsSoFar );
-               }
+               return function(argumentsSoFar) {
+                           
+                  return f.apply( null, argumentsSoFar );
+               };
                
             } else {
             
-               return function(newArguments){
-               
-                  var argumentsSoFar = argumentsAlreadyProvided.concat(newArguments);            
+               return function(argumentsSoFar){
+                           
                   return termsToObjectCallable(tail(terms), f, argumentsSoFar);
-               } 
+               }; 
             }
-         }             
-                     
-         return singletonMapping( head(terms), argumentsAsList(inner()) );
-      }
+         }
+      }      
       
       
       function singletonMapping(key, value) {
