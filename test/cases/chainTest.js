@@ -1,4 +1,4 @@
-testsWithDependencies(
+/*testsWithDependencies(
    'Naga.chain'
 ,  ['bell/givenWhenThen', 'naga/template', 'bell/shouldFail']
 
@@ -31,5 +31,23 @@ testsWithDependencies(
             })
             .then(shouldFail);
       }
+   }
+); */
+
+DependentTestCase(
+   'naga-chain'
+,  ['naga/chain']
+
+,  {  
+      'test chain works with single arguments': function(chain) {
+         var underlying = function(attitude, food) {
+            jstestdriver.console.log(attitude, food);
+         };
+
+         var chained = chain( "I(attitude).eating(food)", underlying );
+         
+         chained.I('like').eating('spinich');
+      }
+
    }
 );
