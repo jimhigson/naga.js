@@ -1,9 +1,6 @@
 define(
-   ['naga/template', 'naga/cacheable', 'naga/argumentsAsList', 'naga/foldl1'],
-   function(template, cacheable, argumentsAsList, foldl1) {
-
-      var combinerFuncTemplate =
-            template('return arguments[0] {symbol} arguments[1]');
+   ['naga/prefix2', 'naga/argumentsAsList', 'naga/foldl1'],
+   function(prefix2, argumentsAsList, foldl1) {
 
       /**
        * Convert from a built-in langugae infix operator
@@ -44,7 +41,7 @@ define(
        */
       return function prefix( symbol ) {
 
-         var combiner = new Function(combinerFuncTemplate(symbol));
+         var combiner = prefix2(symbol);
 
          return argumentsAsList( function(argumentList) {
 
