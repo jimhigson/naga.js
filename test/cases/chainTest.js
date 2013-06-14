@@ -46,6 +46,11 @@ DependentTestCase(
          var I = chain( "I(attitude).eating(food)", underlying );
                                    
          assertEquals("I like eating spinich", ( I('like').eating('spinich') ));
+         
+         var ILike = I('like');
+
+         assertEquals("I like eating spinich", ( ILike.eating('spinich') ));
+         assertEquals("I like eating malteasers", ( ILike.eating('malteasers') ));
       }
 
    }
