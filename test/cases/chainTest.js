@@ -43,11 +43,8 @@ DependentTestCase(
       
          var underlying = template("I {attitude} eating {food}");
 
-         var I = chain( "I(attitude).eating(food)", template );
-         
-
-        
-         assertEquals("I like eating spinich", ( underlying('like', 'spinich') ));                  
+         var I = chain( "I(attitude).eating(food)", underlying );
+                                   
          assertEquals("I like eating spinich", ( I('like').eating('spinich') ));
       }
 
