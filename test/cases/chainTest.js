@@ -36,20 +36,19 @@
 
 DependentTestCase(
    'naga-chain'
-,  ['naga/chain']
+,  ['naga/chain', 'naga/template']
 
 ,  {  
-      'test chain works with single arguments': function(chain) {
-         var underlying = function(attitude, food) {
-            jstestdriver.console.log(attitude, food);
-         };
+      'test chain works with single arguments': function(chain, template) {
+      
+         var underlying = template("I {attitude} eating {food}");
 
-         var chained = chain( "I(attitude).eating(food)", underlying );
+         var I = chain( "I(attitude).eating(food)", template );
          
-         chained.I('like').eating('spinich');
-         
-         // NEXT: needs to be:         
-         chained('like').eating('spinich');
+
+        
+         assertEquals("I like eating spinich", ( underlying('like', 'spinich') ));                  
+         assertEquals("I like eating spinich", ( I('like').eating('spinich') ));
       }
 
    }

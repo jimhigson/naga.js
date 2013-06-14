@@ -57,23 +57,46 @@
  */
 
 define(
-   ['naga/chainSpecParser', 'naga/curry', 'naga/head', 'naga/tail', 'naga/argumentsAsList', 'naga/singletonMapping'],
-   function(parse, curry, head, tail, argumentsAsList, singletonMapping) {
-
-      return function( spec, baseFunction ) {
-      
-         var terms = parse(spec);
-         
-         return termsToChainedFunction(terms, baseFunction, []);                      
-      };
-      
-      
-      function termsToChainedFunction( terms, f, argumentsAlreadyProvided ) {
+   ['naga/chainSpecParser', 'naga/curry', 'naga/head', 'naga/tail', 'naga/argumentsAsList', 'naga/singletonMapping', 'naga/identity'],
+   function(parse, curry, head, tail, argumentsAsList, singletonMapping, identity) {
+            
+      /**
+       * The recursive implementation behind the publicly exposed function.
+       * 
+       * Recursively builds up a callable form of the given function pased on the terms
+       * provided.
+       */
+      function termsToChainedFunction( terms, f, argumentsAlreadyProvided, packaging ) {
                   
          var wrappedFunction = wrappedForChaining(terms, f, argumentsAlreadyProvided);              
-                     
-         return singletonMapping( head(terms), wrappedFunction );
+
+         return packaging( wrappedFunction, terms );                     
       }
+
+      /**
+       * One of two possible values as the packaging parameter given to termsToChainedFunction.
+       * Does no actual packaging of the function, just returns it as if. 
+       * 
+       * This is provided for the outermost recursive call since for that call no object is 
+       * required to be created
+       * 
+       * @param {String[]} terms
+       * @param {Function} f
+       */
+      var packageAsFunction = identity;
+      
+      /**
+       * One of two possible values as the packaging parameter given to termsToChainedFunction.
+       * 
+       * This is provided for all but the outermost recursive call. It packages the function up
+       * as a singleton map to allow a semantic call style.
+       * 
+       * @param {String[]} terms
+       * @param {Function} f
+       */      
+      function packageAsObjectProperty(f, terms) {
+         return singletonMapping( head(terms), f )      
+      }      
       
       function wrappedForChaining(terms, f, argumentsAlreadyProvided) {
       
@@ -95,10 +118,17 @@ define(
                // TODO: check newArguments against arity
                // TODO2: make some arguments optional
                         
-               return termsToChainedFunction(tail(terms), f, argumentsSoFar);
+               return termsToChainedFunction(tail(terms), f, argumentsSoFar, packageAsObjectProperty);
             }; 
          }
       }                  
            
+           
+      return function( spec, baseFunction ) {
+      
+         var terms = parse(spec);
+         
+         return termsToChainedFunction(terms, baseFunction, [], packageAsFunction);                      
+      };           
    }
 );
