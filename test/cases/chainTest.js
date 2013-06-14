@@ -47,6 +47,9 @@ DependentTestCase(
          var chained = chain( "I(attitude).eating(food)", underlying );
          
          chained.I('like').eating('spinich');
+         
+         // NEXT: needs to be:         
+         chained('like').eating('spinich');
       }
 
    }
