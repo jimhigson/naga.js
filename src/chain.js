@@ -64,11 +64,11 @@ define(
       
          var terms = parse(spec);
          
-         return termsToObjectCallable(terms, baseFunction, []);                      
+         return termsToChainedFunction(terms, baseFunction, []);                      
       };
       
       
-      function termsToObjectCallable( terms, f, argumentsAlreadyProvided ) {
+      function termsToChainedFunction( terms, f, argumentsAlreadyProvided ) {
                   
          var wrappedFunction = wrappedForChaining(terms, f, argumentsAlreadyProvided);              
                      
@@ -77,10 +77,11 @@ define(
       
       function wrappedForChaining(terms, f, argumentsAlreadyProvided) {
       
-         return argumentsAsList( inner(terms, f), argumentsAlreadyProvided );         
+         return argumentsAsList( link(terms, f), argumentsAlreadyProvided );         
       }
-      
-      function inner(terms, f) {         
+            
+      function link(terms, f) {       
+        
          if( terms.length === 1 ) {
          
             return function(argumentsSoFar) {
@@ -90,9 +91,11 @@ define(
             
          } else {
          
-            return function(argumentsSoFar){
+            return function(argumentsSoFar, newArguments){
+               // TODO: check newArguments against arity
+               // TODO2: make some arguments optional
                         
-               return termsToObjectCallable(tail(terms), f, argumentsSoFar);
+               return termsToChainedFunction(tail(terms), f, argumentsSoFar);
             }; 
          }
       }                  
