@@ -1,14 +1,21 @@
 
-testsWithDependencies(
+DependentTestCase(
    'Naga.template',
    ['bell/givenWhenThen', 'naga/template'],
    {
-      'test simple template':function (given, template) {
+      /*'test simple template':function (given, template) {
 
          given(template('{day} will be {weather}'))
             .when(calledWith('today', 'rainy'))
                .then(equalTo('today will be rainy'));
-      }
+      }*/
+      
+      'test simple template':function (given, template) {
+
+         var t = template('{day} will be {weather}');
+         
+         assertEquals('Friday will be Sunny', t('Friday', 'Sunny')); 
+      }      
    }
 );
 

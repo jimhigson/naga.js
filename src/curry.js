@@ -12,9 +12,11 @@ define(
           'with arity of {arity}'
       );
       
-      var airityOfZero = throwError('Attempt to curry complete function "{funcName}" with airity ' +
+      var airityOfZero = throwError('Attempt to curry function named "{funcName}" with airity ' +
           'of zero. This isn\'t terribly well suited to partial completion - how do we know when ' +
-          'we have enough arguments to call the underlying function?');      
+          'we have enough arguments to call the underlying function?');
+          
+      var notAFunction = throwError('Attempt to curry something that is not a function');                
 
       function partialComplete(f, arity, argumentAccumulator ) {
          return function( args ) {
@@ -51,6 +53,10 @@ define(
        * @param [arity]
        */
       return function curry(f, arity) {
+         if( !f instanceof Function ) {
+            notAFunction();
+         }
+      
          if( !arity ) {
             arity = f.length;
          }

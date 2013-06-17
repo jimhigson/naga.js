@@ -115,6 +115,7 @@ define(
          } else {
          
             return function(argumentsSoFar, newArguments){
+            
                // TODO: check newArguments against arity
                // TODO2: make some arguments optional
                         

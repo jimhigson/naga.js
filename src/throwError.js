@@ -1,6 +1,6 @@
 define(
-   ['naga/template'], 
-   function(template){
+   ['naga/template', 'naga/airity'], 
+   function(template, airity){
 
    /**
     * Create a new function. Like naga.template but throws an error instead of
@@ -26,9 +26,9 @@ define(
 
       var messageTemplate = template(messagePattern);
 
-      return function(){
+      return airity(messageTemplate.length, function(){
          throw new ErrorConstructor( messageTemplate.apply(null, arguments) );
-      };
+      });
    };
 
 });
