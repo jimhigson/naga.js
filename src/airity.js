@@ -8,6 +8,10 @@ define([], function(){
    // TODO: the usual concept of airity
    return function airity(n, baseFunction) {
    
+      if( n instanceof Function ) {
+         n = n.length; 
+      }
+   
       // first, we create some fake params just so we can get the desired .length
       // reported on the function.
       // TODO: more functional!

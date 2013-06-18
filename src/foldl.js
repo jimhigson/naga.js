@@ -1,19 +1,19 @@
 define(
 
-   ['./empty', './head', './tail'],
+   ['naga/empty', 'naga/head', 'naga/tail'],
    function(empty, head, tail) {
 
-      return function foldl( f, value, list ) {
+      return function foldl( f, z, list ) {
 
          if( empty(list) ) {
-            return value;
+            return z;
 
          } else {
 
             var x = head(list),
                 xs = tail(list);
 
-            return foldl( f, f(value, x), xs);
+            return foldl( f, f(z, x), xs);
          }
       };
    }

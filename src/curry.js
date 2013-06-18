@@ -13,8 +13,9 @@ define(
       );
       
       var airityOfZero = throwError('Attempt to curry function named "{funcName}" with airity ' +
-          'of zero. This isn\'t terribly well suited to partial completion - how do we know when ' +
-          'we have enough arguments to call the underlying function?');
+          'of zero. This function isn\'t suitable to partial completion without specifying the' +
+          'airity - how do we know when we have enough arguments to call the underlying function?' +
+          'Try calling instead like: curry(2, f)');
           
       var notAFunction = throwError('Attempt to curry something that is not a function');                
 

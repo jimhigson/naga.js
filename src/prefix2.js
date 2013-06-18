@@ -1,6 +1,6 @@
 define(
-   ['naga/template', 'naga/curry', 'naga/throwError'],
-   function(template, curry, throwError) {
+   ['naga/template', 'naga/curry', 'naga/throwError', 'naga/validArgs'],
+   function(template, curry, throwError, validArgs) {
 
       var combinerFuncTemplate = template('return a {symbol} b');
       var wrongNumberOfArguments = throwError(
@@ -10,19 +10,19 @@ define(
        */
       return function prefix2( symbol ) {
 
-         var symbolAsFunction = new Function('a', 'b', combinerFuncTemplate(symbol));
-         var wrongNumberOfArgumentsForThisSymbol = curry(wrongNumberOfArguments)(symbol);         
+         var wrongNumberOfArgumentsForThisSymbol = curry(wrongNumberOfArguments)(symbol),
          
-         // TODO: return validateArgs(, symbolAsFunction);
+             symbolAsFunction = new Function('a', 'b', combinerFuncTemplate(symbol)),
          
-         return function(){
-            if( arguments.length != 2 ) {
-               wrongNumberOfArgumentsForThisSymbol(arguments.length);
-            }
-            
-            return symbolAsFunction.apply(this, arguments);
-         }
+             validateNumberOfArguments = function(args){
+                args.length == 2 || wrongNumberOfArgumentsForThisSymbol(args.length);
+             };
+                                    
+         return validArgs(validateNumberOfArguments, symbolAsFunction);         
       };
 
    }
+   
+   
 );
+

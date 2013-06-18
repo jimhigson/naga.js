@@ -29,7 +29,16 @@ DependentTestCase(
          var add = airity(2, prefix2('+'));
       
          assertEquals(9, add(4,5)); 
-      }                  
+      }
+      
+   ,  'test can copy the airity of another function':function (airity, identity) {
+
+         var binaryFunction = function(a,b){return a+b};
+         
+         var binaryIdentity = airity(binaryFunction, identity);
+         
+         assertEquals(2, binaryIdentity.length);          
+      }                        
    }
 );
 
