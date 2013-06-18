@@ -26,9 +26,9 @@ DependentTestCase(
       
    ,  'test function does the same with airity 2':function (airity, identity, lift, add) {
 
-         var add = airity(2, add);
+         var binaryAdd = airity(2, add);
       
-         assertEquals(9, add(4,5)); 
+         assertEquals(9, binaryAdd(4,5)); 
       }
       
    ,  'test can copy the airity of another function':function (airity, identity) {
