@@ -16,7 +16,7 @@ define(
             // TODO: could allow spec to return something different and then pass that through? 
                       
             // if no exceptions have been thrown, go through to the underlying:
-            underlying.apply(this, argumentsList);                       
+            return underlying.apply(this, argumentsList);                       
          }));
       
       };               
