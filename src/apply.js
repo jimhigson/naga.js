@@ -2,7 +2,7 @@ define(
    [],
    function(){
       return function apply(f, as){
-         f.apply(null, as);
+         return f.apply(null, as);
       }
    }
 );
