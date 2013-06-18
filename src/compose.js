@@ -7,7 +7,7 @@ define(
        */         
       function compose2(f, g) {
       
-         return function(){
+         return function compositionOf2(){
             var bEvaluation = apply(g, arguments);
             
             return f(bEvaluation);
