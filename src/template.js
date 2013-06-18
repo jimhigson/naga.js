@@ -1,6 +1,6 @@
 define(
-   ['naga/arrayIterator', 'naga/argumentsAsList', 'naga/airity'],
-   function(arrayIterator, argumentsAsList, airity){
+           ['naga/curry', 'naga/arrayIterator', 'naga/argumentsAsList'],
+   function(curry,             arrayIterator,        argumentsAsList ){
    
       var placeholderPattern = /\{\w+\}/g;
    
@@ -30,14 +30,13 @@ define(
        * @param pattern
        */
       return function template(pattern) {
-         
-         var replacementsFn = argumentsAsList(function( replacementTerms ){
+         var   replacementsFn = argumentsAsList(function( replacementTerms ){
    
-            return pattern.replace(placeholderPattern, arrayIterator(replacementTerms));
-         });
+                  return pattern.replace(placeholderPattern, arrayIterator(replacementTerms));
+               });
          
-         // by making sure the template has the correct airity, it is more easily curryable:
-         return airity(patternArity(pattern), replacementsFn);
+         // return value is always curried
+         return curry(replacementsFn, patternArity(pattern));
       }
    }
 
