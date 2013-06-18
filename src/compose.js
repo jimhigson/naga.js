@@ -1,38 +1,50 @@
 define(
-   ['naga/identity', 'naga/head', 'naga/tail'],
-   function( identify, head, tail ){
+           ['naga/identity', 'naga/argumentsAsList', 'naga/head', 'naga/tail', 'naga/apply'],
+   function(      identify,        argumentsAsList,        head,        tail,        apply ){
          
-      /* compose two functions */         
-      function compose2(functionA, functionB) {
+      /**
+       *  Compose two functions. returns a function that gives f(g(input))
+       */         
+      function compose2(f, g) {
+      
          return function(){
-            return functionA(functionB.apply(null, arguments));
+            var bEvaluation = apply(g, arguments);
+            
+            return f(bEvaluation);
          }
       }
 
-      /* compose N functions where N > 0 */      
-      function composeN(functionsList) {
+      /**
+       * Compose one or more functions 
+       */      
+      function composeN(functionList) {
          
-         var head = head(functionsList);
+         var f = head(functionList),
+             fs = tail(functionList);
          
-         // the composition of one function is that function          
-         if( functionsList.length == 1 ) {
-            return head(functionsList);      
+         // is the tail is empty, the composition of one function is just the head:          
+         if( fs.length == 0 ) {
+            return f;      
          }         
 
-         return compose2( head, composeN(tail(functionsList)) );      
+         return compose2( f, composeN(fs) );      
       }
                       
-      return function compose() {
-      
-         var functionsList = Array.prototype.slice(arguments);
-         
+      /**
+       * Compose one or more functions, given as varargs.
+       * 
+       *    Eg: compose(f,g);
+       *    Eg: compose(f,g,h);
+       */                            
+      return argumentsAsList( function compose(functionList) {
+               
          // the compositions of zero functions provides an identity function:
-         if( functionsList.length == 0 ) {
+         if( functionList.length == 0 ) {
             return identify;      
          }
          
-         return composeN(functionsList);      
-      }
+         return composeN(functionList);      
+      });
          
    }
 );
