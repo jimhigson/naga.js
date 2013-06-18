@@ -1,6 +1,6 @@
 define(
-   ['naga/template', 'naga/airity'], 
-   function(template, airity){
+   ['naga/curry'], 
+   function(curry){
 
    /**
     * Create a new function. Like naga.template but throws an error instead of
@@ -8,27 +8,32 @@ define(
     *
     * For example:
     * <code>
-    *    var reportError = Bell.template("{thing} failed because of {reason}");
+    *    var fail = throwError(template("{thing} failed because of {reason}"));
     *
-    *    try{
-    *       reportError("owls", "stiff necks")
-    *    } catch(e) {
-    *       // e.message is "owls failed because of stiff necks".
-    *    }
+    *       fail("owls", "stiff necks")
+    *       // error will be thrown with message "owls failed because of stiff necks".
+    *       
+    *       fail("owls")("stiff necks")
+    *       // same behaviour as above
+    *
     * </code>
     *
     * @param pattern
     */
-   return function throwError(messagePattern, ErrorConstructor) {
+   return function throwError(messageTemplate, MaybeErrorConstructor) {
+      
+      var ErrorConstructor = MaybeErrorConstructor || Error;
+      
+      // WRITE ABOUT: similar to Maybe in Haskell if every "maybe-able" param gets called Maybe?
+      // not really but at least followable.
+      // ifNot( ErrorConstructor ).then( Error );
 
-      // TODO: defaults function
-      ErrorConstructor = ErrorConstructor || Error;
-
-      var messageTemplate = template(messagePattern);
-
-      return airity(messageTemplate.length, function(){
+      var templateAirity = messageTemplate.length;
+      
+      return curry(function(){
+               
          throw new ErrorConstructor( messageTemplate.apply(null, arguments) );
-      });
+      }, templateAirity);
    };
 
 });
