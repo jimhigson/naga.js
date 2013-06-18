@@ -8,10 +8,19 @@ DependentTestCase(
          function add(a, b){         
             return a + b;         
          }
-       
-       
+              
          assertEquals(3, apply(add, [1,2]));
       }
+      
+   ,
+      'test apply works with zero arguments':function (apply) {
+      
+         function two(){         
+            return 2;         
+         }
+              
+         assertEquals(2, apply(two, []));
+      }      
    }
 );
 
