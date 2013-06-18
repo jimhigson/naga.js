@@ -1,26 +1,27 @@
 define(
-   ['naga/throwError'],
-
-   function(throwError){
-
-      var noArgumentsProvided = throwError(
-          'Attempt to partially complete with zero arguments provided'
+   ['naga/error/halt', 'naga/airity', 'naga/argumentsAsList'],
+                    
+   function(halt, airity, argumentsAsList){
+      
+      var noArgumentsProvided = halt(
+             'Attempt to partially complete with zero arguments provided'
       );
 
-      var partialCompletionOfTooManyArguments = throwError(
-          'Attempt to partially complete {numberOfArguments} argument(s) into function "{funcName}" ' +
-          'with arity of {arity}'
+      var partialCompletionOfTooManyArguments = halt(
+             'Attempt to partially complete {numberOfArguments} argument(s) into function "{funcName}" ' +
+             'with arity of {arity}'
       );
       
-      var airityOfZero = throwError('Attempt to curry function named "{funcName}" with airity ' +
+      var airityOfZero = halt('Attempt to curry function named "{funcName}" with airity ' +
           'of zero. This function isn\'t suitable to partial completion without specifying the' +
           'airity - how do we know when we have enough arguments to call the underlying function?' +
           'Try calling instead like: curry(2, f)');
-          
-      var notAFunction = throwError('Attempt to curry something that is not a function');                
+      
+      var notAFunction = halt('Attempt to curry something that is not a function');                
 
-      function partialComplete(f, arity, argumentAccumulator ) {
-         return function( args ) {
+      function partialComplete(f, totalAirity, argumentAccumulator ) {
+      
+         var partialyCompleted = argumentsAsList(function( args ) {
 
             if( args.length == 0 ) {
                noArgumentsProvided();
@@ -28,18 +29,22 @@ define(
          
             var accumulatedArguments = argumentAccumulator.concat( args );
             
-            if( accumulatedArguments.length > arity ) {
+            if( accumulatedArguments.length > totalAirity ) {
           
-               partialCompletionOfTooManyArguments(accumulatedArguments.length, f.name, arity);
+               partialCompletionOfTooManyArguments(accumulatedArguments.length, f.name, totalAirity);
             }
             
-            if( accumulatedArguments.length == arity ) {
+            if( accumulatedArguments.length == totalAirity ) {
             
                return f.apply(null, accumulatedArguments);               
             } 
             
-            return partialComplete(f, arity, accumulatedArguments);                           
-         };
+            return partialComplete(f, totalAirity, accumulatedArguments);                           
+         });
+
+         var remainingAirity = totalAirity - argumentAccumulator.length;
+         
+         return airity(remainingAirity, partialyCompleted);
       }
 
       /**
@@ -49,24 +54,24 @@ define(
        *
        * For functions that examine their arguments array, giving the
        * arity is required or unexpected behaviour is likely.
+       * 
+       * TODO: Note on airity of curried functions
        *
        * @param f
        * @param [arity]
        */
-      return function curry(f, arity) {
+      return function curry(f, maybeAirity) {
          if( !f instanceof Function ) {
             notAFunction();
          }
       
-         if( !arity ) {
-            arity = f.length;
-         }
+         var targetAirity = maybeAirity || f.length;
          
-         if( arity === 0 ) {
+         if( targetAirity === 0 ) {
             airityOfZero();
          }
 
-         return partialComplete(f, arity, []);
+         return partialComplete(f, targetAirity, []);
       };
    }
 );

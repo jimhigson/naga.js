@@ -1,14 +1,67 @@
-(function() {
+DependentTestCase(
+   'Naga.curry',
+   ['naga/curry'],
+   {
+      'test curry works called in non-curry style': function(curry){
+      
+         var productOf3 = curry(function (a, b, c ) {
+               return a * b * c;
+         });
+         
+         assertEquals( 24, productOf3( 2,3,4 ) );       
+      }
+   ,       
+      'test curry works called in curry-style': function(curry){
+         
+         var productOf3 = curry(function (a, b, c ) {
+               return a * b * c;
+         });
+         
+         assertEquals( 24, productOf3(2)(3)(4) );       
+      }
+   ,
+      'test airity is preserved': function(curry){
+         
+         var productOf3 = curry(function (a, b, c ) {
+               return a * b * c;
+         });
+         
+         assertEquals( 3, productOf3.length );       
+      }
+      
+   ,
+      'test airity is reduced after single argument is given': function(curry){
+         
+         var productOf3 = curry(function (a, b, c ) {
+               return a * b * c;
+         });
+         
+         assertEquals( 2, productOf3(2).length );       
+      }
+      
+   ,
+      'test airity is reduced after two arguments are given in one call': function(curry){
+         
+         var productOf3 = curry(function (a, b, c ) {
+               return a * b * c;
+         });
+         
+         assertEquals( 1, productOf3(2,1).length );
+      }
+      
+   ,
+      'test airily is reduced after two arguments are given in separate calls': function(curry){
+         
+         var productOf3 = curry(function (a, b, c ) {
+               return a * b * c;
+         });
+         
+         assertEquals( 1, productOf3(2)(1).length );
+      }                                   
+   }
+);    
 
-   // can can eval take a toString-able thing? In which case can also support this:
-
-   // a simple function to test currying, multiplies three arguments
-   var productOf3 = function (a, b, c ) {
-      return a * b * c;
-   };
-
-   AsyncTestCase("Naga.curry", {
-
+/*
       'test productOf3 works as intended':
          testWithDependencies(['bell/givenWhenThen'], function(given){
 
@@ -90,6 +143,4 @@
       }
 
 
-   });
-
-})();
+   }); */
