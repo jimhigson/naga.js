@@ -1,8 +1,8 @@
 define(
 
-         ['require'/*, 'naga/template', 'naga/throwError'*/],
+         ['require', 'naga/apply'/*, 'naga/template', 'naga/throwError'*/],
           
-function(  require      /* _template,       _throwError */) {
+function(  require,   apply      /* _template,       _throwError */) {
 
    return function halt(templateText){
    
@@ -18,9 +18,5 @@ function(  require      /* _template,       _throwError */) {
       }
    
    };
-
-   function apply(f, as){
-      f.apply(null, as);
-   }
 
 });
