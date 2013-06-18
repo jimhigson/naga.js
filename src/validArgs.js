@@ -1,9 +1,9 @@
 define(
-   ['naga/airity', 'naga/argumentsAsList', 'naga/throwError'],
+   ['naga/airity', 'naga/argumentsAsList'],
         
    // TODO: provide noop version of this for production code
    
-   function(airity, argumentsAsList, throwError){
+   function(airity, argumentsAsList){
               
       return function ( spec, underlying ) {
       
@@ -13,7 +13,9 @@ define(
             // exception.
             spec(argumentsAsList);
             
-            // TODO: could allow spec to return something different and then pass that through? 
+            // TODO: could allow spec to return something different and then pass that through?
+            //forwardArguments = ifNot(spec(argumentsAsList)).then(argumentsAsList);
+            // TODO: this could form a super-short argumentsAsList implementation 
                       
             // if no exceptions have been thrown, go through to the underlying:
             return underlying.apply(this, argumentsList);                       
