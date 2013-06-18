@@ -1,7 +1,7 @@
 
 DependentTestCase(
    'Naga.airity',
-   ['naga/airity', 'naga/identity', 'naga/lift', 'naga/prefix2'],
+   ['naga/airity', 'naga/identity', 'naga/lift', 'naga/add'],
    {
       /*'test simple template':function (given, template) {
 
@@ -10,23 +10,23 @@ DependentTestCase(
                .then(equalTo('today will be rainy'));
       }*/
       
-      'test length is correct':function (airity, identity, lift, prefix2) {
+      'test length is correct':function (airity, identity, lift, add) {
       
          var binaryIdentity = airity(2, identity);
       
          assertEquals(2, binaryIdentity.length); 
       }
       
-   ,  'test function does the same with airity 1':function (airity, identity, lift, prefix2) {
+   ,  'test function does the same with airity 1':function (airity, identity, lift, add) {
 
          var four = airity(1, lift(4));
       
          assertEquals(4, four()); 
       }
       
-   ,  'test function does the same with airity 2':function (airity, identity, lift, prefix2) {
+   ,  'test function does the same with airity 2':function (airity, identity, lift, add) {
 
-         var add = airity(2, prefix2('+'));
+         var add = airity(2, add);
       
          assertEquals(9, add(4,5)); 
       }
