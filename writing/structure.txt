@@ -3,12 +3,20 @@ Overall structure:
 
    * Intro
    * Background
-   * Application and Reflection   
+      Shouldn't describe in terms of my solution
+      Should give sufficient basis for evaluation of my success
+      
+   * Application and Reflection
+      Guidence is to seperate into two parts (see 21&22 in folder)
+            
    * Conclusion - should mirror intro
    * Bibliography
-   * Appendix 
+   * Appendix
+      Likely will just be skimmed 
 
 Style/Patterns:
+   * Keep separate parts separate. Don't merge into one piece with arbitary headings.
+   * 
    * Table of figures, refer to from text
    * Write as 'we'
    
@@ -16,4 +24,5 @@ Style/Patterns:
    
 Other notes:
    * prefer smaller scope over larger
-   *    
+   * Advice is to use sub-sections sparingly. Flowing piece of work.
+   * Asked to avoid footnotes
