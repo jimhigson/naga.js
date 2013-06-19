@@ -1,0 +1,19 @@
+Overall structure:
+   * Proposal
+
+   * Intro
+   * Background
+   * Application and Reflection   
+   * Conclusion - should mirror intro
+   * Bibliography
+   * Appendix 
+
+Style/Patterns:
+   * Table of figures, refer to from text
+   * Write as 'we'
+   
+   
+   
+Other notes:
+   * prefer smaller scope over larger
+   *    
