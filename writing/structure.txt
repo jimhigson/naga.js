@@ -26,3 +26,5 @@ Other notes:
    * prefer smaller scope over larger
    * Advice is to use sub-sections sparingly. Flowing piece of work.
    * Asked to avoid footnotes
+   
+   * Multiple exit points are useful (eg, quickcheck as an expansion) 
