@@ -1,0 +1,58 @@
+Msc notes
+
+Find problem, solve competently
+
+BDD style tests: using imperative languages in a declarative way
+
+Testing pyramid. But assert that bbd-style is becoming more common in tdd. Nothing inherent about the
+style that menas it is unsuited to tdd (how it came about - expressing specs to non-experts) and now
+we have it, if it were as easy to do why not do it all the time? alternative - test that look like
+imperative code rather than specifications.
+
+Real world problem: never quite happy with evolved style bdd solutions. Why? Repetitive boilerplate, 
+lacking generisism, one-off, similar style expressions. Statefull for convenience (ie, thing under 
+test object), allows state to leak between tests. Has hidden bugs.
+
+State at the end pattern worse than functions at the end. Still, those functions often follow predictable 
+patterns and would benefit (correctness, time savings) from a generic form. Eg, function callingFoo 
+that takes stateful thing and calls foo on it.
+
+Under real world refactorings, bbd code has tended evolutionarily towards being more functional. At IG - 
+new style vs old style tests on h5c. Take a leap that couldn't be easily done in this methodology by 
+stepping back and designing the tests after the suite, not the suite whilst writing the tests.
+
+Can only find bugs the test writer anticipated. Quickcheck finds the others. Sometimes just finding an 
+exception is thrown in some circumstance is enough.
+
+Oboe good candidate for testing because mixed paradigm (some stateful, oop components, some stateless, 
+pure functional ones) - need oop part to present a familiar interface to integrate with existing projects. 
+Functional part why? Mixed paradigm makes good candidate because can know bell covers a wide range of 
+project assertions. Also designed for testabity and has pyramid if testing behind it. Already has tests 
+so can compare before and after. Combined with testing itself - also allows validation of ability to test 
+code of abstract expression rather than which performs a particular concrete task in a particular problem 
+domain.
+
+Control the project so free to rewrite the tests. Bell finds a first real-world usage.
+
+Use libs where helpful, rely on a stack if pre existing work.
+
+Incorporate quick check?
+  If so, need to start reading up on it now.
+    Not all of, that'd be too much. But a start of to get going, hints that rest could be incorporated
+
+Functional lines up well with bdd. Passing from one instruction or check to the next in sequence follows 
+composition of stages expressed as functions. The possibility of state leaking between tests is poisonous 
+to bdd, pure functional fits the avoidance of state well because it renders it unnecessary.
+
+Pure and impure functional in js.
+
+Define own where useful - why useful to make own?
+
+Can write in the context of when started the project, libs there then.
+
+Require problems: heavyweight
+Simple tsort and concat is an alternative (perhaps less powerful, can't handle circular)
+Is amd relevant in BDD?
+   Do tests need lazy loading?
+   To correctness of expressions inside code?
+   Very convenient to not have to transform code before test runs. Line numbers etc.
